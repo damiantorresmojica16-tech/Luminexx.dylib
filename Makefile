@@ -1,6 +1,6 @@
 export THEOS = /workspaces/theos
-export SDKROOT = /workspaces/theos/sdks/iPhoneOS14.0.sdk
-
+export SDKROOT = $(THEOS)/sdks/iPhoneOS14.5.sdk
+export TARGET = iphone:clang:14.5:14.5
 # Corregimos la versión para evitar la advertencia de iOS 9.0
 export TARGET = iphone:clang:14.0:14.0
 export ARCHS = arm64
