@@ -1,8 +1,9 @@
-export THEOS = /workspaces/theos
-# Definimos el SDK de forma explícita
-export SDKROOT = /workspaces/theos/sdks/iPhoneOS14.5.sdk
-# Forzamos la versión del SDK aquí también
-export SDKVERSION = 14.5
+# Forzar asignación inmediata con :=
+SDKROOT := /workspaces/theos/sdks/iPhoneOS14.5.sdk
+export SDKROOT
+
+include $(THEOS)/makefiles/common.mk
+...
 
 include $(THEOS)/makefiles/common.mk
 
