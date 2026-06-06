@@ -1,12 +1,13 @@
-cat <<EOF > Makefile
 export THEOS = /workspaces/theos
-include \$(THEOS)/makefiles/common.mk
+export SDKROOT = /workspaces/theos/sdks/iPhoneOS14.0.sdk
+
+# Corregimos la versión para evitar la advertencia de iOS 9.0
+export TARGET = iphone:clang:14.0:14.0
+export ARCHS = arm64
+
+include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Luminexx
 Luminexx_FILES = Tweak.x
 
-export ARCHS = arm64
-export TARGET = iphone:clang:14.0:14.0
-
-include \$(THEOS)/makefiles/tweak.mk
-EOF
+include $(THEOS)/makefiles/tweak.mk
