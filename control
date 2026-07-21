@@ -1,9 +1,0 @@
-Package: com.tuusuario.luminex
-Name: Luminexx
-Version: 0.0.1
-Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
-Maintainer: Luminex
-Author: Luminex
-Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000)
