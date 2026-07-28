@@ -6,7 +6,7 @@ import random
 import string
 import time
 
-8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI'
+8712217253:"8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI"
 DB_FILE = 'database.json'
 
 PRICES = {
