@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Luminex iOS - Tool</title>
+  <title>Luminex Tool</title>
   <style>
     :root {
-      --bg: #0d0f12;
-      --card-bg: #161920;
-      --accent: #ff6b00; /* Naranja Neón */
+      --bg: #0b0d10;
+      --card-bg: #13161c;
+      --accent: #ff6b00;
       --accent-hover: #e05d00;
       --text: #ffffff;
       --text-muted: #8a8d93;
       --error: #ff4d4d;
       --success: #20c997;
+      --border: rgba(255, 107, 0, 0.4);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
@@ -33,165 +34,144 @@
       padding: 20px;
     }
 
-    .container {
+    .card {
       background: var(--card-bg);
       width: 100%;
-      max-width: 500px;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,107,0,0.2);
+      max-width: 420px;
+      padding: 35px 25px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
       text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
     }
 
-    h1 {
-      color: var(--accent);
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
       margin-bottom: 10px;
-      font-size: 1.8rem;
+      color: #ffffff;
     }
 
-    p {
+    p.subtitle {
       color: var(--text-muted);
       font-size: 0.95rem;
+      line-height: 1.4;
       margin-bottom: 25px;
     }
 
-    /* Zona de carga de archivos */
-    .file-dropzone {
-      border: 2px dashed var(--accent);
-      border-radius: 12px;
-      padding: 30px 20px;
-      cursor: pointer;
-      background: rgba(255,107,0,0.03);
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
+    .input-box {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #2a2d34;
+      background: #090a0c;
+      color: #ffffff;
+      text-align: center;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+      outline: none;
     }
 
-    .file-dropzone:hover {
-      background: rgba(255,107,0,0.08);
-    }
-
-    .file-dropzone input {
-      display: none;
+    .input-box:focus {
+      border-color: var(--accent);
     }
 
     .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
       width: 100%;
-      transition: background 0.3s;
+      background: #4a4d54;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
 
-    .btn:hover {
+    .btn.active {
+      background: var(--accent);
+    }
+
+    .btn.active:hover {
       background: var(--accent-hover);
     }
 
-    .btn:disabled {
-      background: #4a4d52;
-      cursor: not-allowed;
+    .file-zone {
+      border: 2px dashed var(--accent);
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+      cursor: pointer;
+      background: rgba(255, 107, 0, 0.02);
     }
 
-    /* Modal / Popup de Key */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      border: 1px solid var(--accent);
-    }
-
-    .modal-content input {
-      width: 100%;
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: #0d0f12;
-      color: #fff;
-      text-align: center;
-      font-size: 1rem;
-      letter-spacing: 1px;
+    .file-zone input {
+      display: none;
     }
 
     .msg {
-      margin-top: 15px;
+      margin-top: 18px;
       font-size: 0.9rem;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .msg.error { color: var(--error); }
     .msg.success { color: var(--success); }
-    
-    .hidden { display: none !important; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
 
-  <!-- Modal de Validación de Key -->
-  <div id="modalKey" class="modal-overlay">
-    <div class="modal-content">
+  <div class="card">
+    <!-- Vista 1: Entrada de Key -->
+    <div id="viewKey">
       <h2>Acceso Requerido</h2>
-      <p>Ingresa tu licencia/key generada desde el bot de Telegram para continuar.</p>
-      <input type="text" id="inputKey" placeholder="WIDMAN-WEB-XXXX-XXXX" />
-      <button id="btnValidarKey" class="btn" onclick="validarKey()">Ingresar</button>
+      <p class="subtitle">Ingresa tu licencia/key generada desde el bot de Telegram para continuar.</p>
+      
+      <input type="text" id="inputKey" class="input-box" placeholder="WIDMAN-WEB-XXXX-XXXX" oninput="toggleBtnState()" />
+      <button id="btnIngresar" class="btn" onclick="validarKey()">Ingresar</button>
+      
       <div id="msgKey" class="msg"></div>
     </div>
-  </div>
 
-  <!-- Panel Principal de la Herramienta -->
-  <div class="container">
-    <h1>Luminex Tool</h1>
-    <p>Sube tu archivo para aplicar las modificaciones automáticamente.</p>
+    <!-- Vista 2: Subir Archivo (Oculta hasta validar key) -->
+    <div id="viewTool" class="hidden">
+      <h2>Luminex Tool</h2>
+      <p class="subtitle">Sube tu archivo para aplicar la modificación automáticamente.</p>
 
-    <div class="file-dropzone" onclick="document.getElementById('fileInput').click()">
-      <span id="fileLabel">📁 Toca para seleccionar archivo</span>
-      <input type="file" id="fileInput" onchange="actualizarNombreArchivo(this)" />
+      <div class="file-zone" onclick="document.getElementById('fileInput').click()">
+        <span id="fileLabel">📁 Seleccionar archivo</span>
+        <input type="file" id="fileInput" onchange="archivoSeleccionado(this)" />
+      </div>
+
+      <button id="btnProcesar" class="btn active" onclick="procesarArchivo()" disabled>Modificar y Descargar</button>
+      <div id="msgTool" class="msg"></div>
     </div>
-
-    <button id="btnProcesar" class="btn" onclick="procesarArchivo()" disabled>Modificar y Descargar</button>
-    <div id="msgStatus" class="msg"></div>
   </div>
 
   <script>
-    // Tu API URL de Render ya agregada
     const API_URL = "https://luminexx-dylib.onrender.com";
-
     let keyGuardada = "";
 
-    // 1. Validar la Key contra MongoDB (Render)
+    function toggleBtnState() {
+      const val = document.getElementById("inputKey").value.trim();
+      const btn = document.getElementById("btnIngresar");
+      if (val.length > 0) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    }
+
     async function validarKey() {
       const input = document.getElementById("inputKey");
-      const btn = document.getElementById("btnValidarKey");
+      const btn = document.getElementById("btnIngresar");
       const msg = document.getElementById("msgKey");
       const keyVal = input.value.trim();
 
-      if (!keyVal) {
-        msg.className = "msg error";
-        msg.textContent = "Por favor escribe una Key válida.";
-        return;
-      }
+      if (!keyVal) return;
 
       btn.disabled = true;
       msg.className = "msg";
@@ -202,13 +182,14 @@
         const data = await response.json();
 
         if (data.valida) {
-          msg.className = "msg success";
-          msg.textContent = "¡Key correcta! Accediendo...";
           keyGuardada = keyVal;
+          msg.className = "msg success";
+          msg.textContent = "¡Key válida!";
           
           setTimeout(() => {
-            document.getElementById("modalKey").classList.add("hidden");
-          }, 800);
+            document.getElementById("viewKey").classList.add("hidden");
+            document.getElementById("viewTool").classList.remove("hidden");
+          }, 500);
         } else {
           msg.className = "msg error";
           msg.textContent = data.error || "Key no válida o expirada.";
@@ -221,8 +202,7 @@
       }
     }
 
-    // 2. Mostrar nombre del archivo seleccionado
-    function actualizarNombreArchivo(input) {
+    function archivoSeleccionado(input) {
       const label = document.getElementById("fileLabel");
       const btn = document.getElementById("btnProcesar");
 
@@ -230,16 +210,15 @@
         label.textContent = `📄 ${input.files[0].name}`;
         btn.disabled = false;
       } else {
-        label.textContent = "📁 Toca para seleccionar archivo";
+        label.textContent = "📁 Seleccionar archivo";
         btn.disabled = true;
       }
     }
 
-    // 3. Enviar archivo a procesar
     async function procesarArchivo() {
       const fileInput = document.getElementById("fileInput");
       const btn = document.getElementById("btnProcesar");
-      const msg = document.getElementById("msgStatus");
+      const msg = document.getElementById("msgTool");
 
       if (!fileInput.files[0] || !keyGuardada) return;
 
@@ -249,7 +228,7 @@
 
       btn.disabled = true;
       msg.className = "msg";
-      msg.textContent = "Procesando archivo... Por favor espera.";
+      msg.textContent = "Procesando archivo...";
 
       try {
         const response = await fetch(`${API_URL}/modificar-archivo`, {
@@ -262,7 +241,6 @@
           throw new Error(errData.detail || "Error al modificar archivo.");
         }
 
-        // Convertir la respuesta a Blob y descargar
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -274,7 +252,7 @@
         window.URL.revokeObjectURL(url);
 
         msg.className = "msg success";
-        msg.textContent = "¡Archivo modificado y descargado con éxito!";
+        msg.textContent = "¡Descargado con éxito!";
       } catch (err) {
         msg.className = "msg error";
         msg.textContent = err.message || "Ocurrió un error inesperado.";
