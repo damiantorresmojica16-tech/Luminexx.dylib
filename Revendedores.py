@@ -6,7 +6,8 @@ import random
 import string
 import time
 
-8712217253:"8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI"
+TOKEN_RESELLER = “8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI”
+bot = telebot.TeleBot(TOKEN_RESELLER)
 DB_FILE = 'database.json'
 
 PRICES = {
