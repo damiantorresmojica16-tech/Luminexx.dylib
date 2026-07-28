@@ -3,151 +3,321 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Luminex Tool</title>
+  <title>Widman iOS</title>
   <style>
     :root {
-      --bg: #0b0d10;
-      --card-bg: #13161c;
-      --accent: #ff6b00;
-      --accent-hover: #e05d00;
+      --bg: #0b0b12;
+      --card-bg: #12121e;
+      --card-border: #1d1d2f;
+      --primary: #7c4dff;
+      --primary-hover: #651fff;
       --text: #ffffff;
-      --text-muted: #8a8d93;
+      --text-muted: #8b8ba7;
+      --accent-badge: #261a45;
+      --accent-badge-text: #a77cff;
       --error: #ff4d4d;
-      --success: #20c997;
-      --border: rgba(255, 107, 0, 0.4);
+      --success: #00e676;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    /* Header Navbar */
+    header {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .btn-telegram {
+      background: #18222d;
+      color: #29a9eb;
+      border: 1px solid rgba(41, 169, 235, 0.3);
+      padding: 8px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Hero Principal */
+    .hero {
+      text-align: center;
+      padding: 30px 20px 20px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-badge);
+      color: var(--accent-badge-text);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      border: 1px solid rgba(124, 77, 255, 0.3);
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 15px;
+    }
+
+    h1 span {
+      color: var(--primary);
+    }
+
+    p.description {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .btn-main {
+      width: 100%;
+      max-width: 340px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(124, 77, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-main:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-main:disabled {
+      background: #33334d;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 480px;
+      margin: 40px 0 20px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-item p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .stat-single {
+      grid-column: span 3;
+      margin-top: 10px;
+    }
+
+    /* Modal / Pop-up de Key */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      z-index: 1000;
       padding: 20px;
     }
 
-    .card {
+    .modal-card {
       background: var(--card-bg);
+      border: 1px solid var(--primary);
+      padding: 30px 24px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 420px;
-      padding: 35px 25px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
+      max-width: 400px;
       text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
     }
 
-    h2 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #ffffff;
-    }
-
-    p.subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.4;
-      margin-bottom: 25px;
-    }
-
-    .input-box {
+    .modal-card input {
       width: 100%;
       padding: 14px;
-      border-radius: 10px;
-      border: 1px solid #2a2d34;
-      background: #090a0c;
-      color: #ffffff;
+      margin: 18px 0;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: #08080e;
+      color: #fff;
       text-align: center;
       font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      margin-bottom: 15px;
       outline: none;
     }
 
-    .input-box:focus {
-      border-color: var(--accent);
+    .modal-card input:focus {
+      border-color: var(--primary);
     }
 
-    .btn {
-      width: 100%;
-      background: #4a4d54;
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .btn.active {
-      background: var(--accent);
-    }
-
-    .btn.active:hover {
-      background: var(--accent-hover);
-    }
-
-    .file-zone {
-      border: 2px dashed var(--accent);
-      border-radius: 12px;
+    .file-box {
+      border: 2px dashed var(--primary);
+      border-radius: 14px;
       padding: 25px;
-      margin: 20px 0;
+      margin: 15px 0;
       cursor: pointer;
-      background: rgba(255, 107, 0, 0.02);
+      background: rgba(124, 77, 255, 0.03);
     }
 
-    .file-zone input {
-      display: none;
-    }
+    .file-box input { display: none; }
 
     .msg {
-      margin-top: 18px;
+      margin-top: 15px;
       font-size: 0.9rem;
       font-weight: 600;
     }
-
     .msg.error { color: var(--error); }
     .msg.success { color: var(--success); }
-    .hidden { display: none; }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <!-- Vista 1: Entrada de Key -->
-    <div id="viewKey">
-      <h2>Acceso Requerido</h2>
-      <p class="subtitle">Ingresa tu licencia/key generada desde el bot de Telegram para continuar.</p>
-      
-      <input type="text" id="inputKey" class="input-box" placeholder="WIDMAN-WEB-XXXX-XXXX" oninput="toggleBtnState()" />
-      <button id="btnIngresar" class="btn" onclick="validarKey()">Ingresar</button>
-      
-      <div id="msgKey" class="msg"></div>
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span>🎮</span> Widman iOS
+    </div>
+    <a href="https://t.me/" class="btn-telegram" target="_blank">
+      <span>✈️</span> Telegram
+    </a>
+  </header>
+
+  <!-- Hero Principal -->
+  <section class="hero">
+    <div class="badge">
+      ✨ HERRAMIENTA FREE FIRE IOS
     </div>
 
-    <!-- Vista 2: Subir Archivo (Oculta hasta validar key) -->
-    <div id="viewTool" class="hidden">
-      <h2>Luminex Tool</h2>
-      <p class="subtitle">Sube tu archivo para aplicar la modificación automáticamente.</p>
+    <h1>Crea tus archivos de<br><span>Free Fire</span> fácil y rápido</h1>
 
-      <div class="file-zone" onclick="document.getElementById('fileInput').click()">
-        <span id="fileLabel">📁 Seleccionar archivo</span>
-        <input type="file" id="fileInput" onchange="archivoSeleccionado(this)" />
+    <p class="description">
+      Genera y personaliza tus archivos de Free Fire directamente desde el navegador. Sin instalaciones, sin complicaciones — solo sube tu archivo y listo.
+    </p>
+
+    <button class="btn-main" onclick="abrirModalKey()">
+      🔒 Entrar a la herramienta
+    </button>
+  </section>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-item">
+      <h3>iOS</h3>
+      <p>Plataforma</p>
+    </div>
+    <div class="stat-item">
+      <h3>5+</h3>
+      <p>Funciones</p>
+    </div>
+    <div class="stat-item">
+      <h3>100%</h3>
+      <p>Gratis</p>
+    </div>
+    <div class="stat-item stat-single">
+      <h3>24/7</h3>
+      <p>Disponible</p>
+    </div>
+  </div>
+
+  <!-- Modal de Validación / Subida -->
+  <div id="modalHerramienta" class="modal-overlay hidden">
+    <div class="modal-card">
+      <!-- Paso 1: Ingresar Key -->
+      <div id="stepKey">
+        <h2>Acceso Requerido</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">
+          Ingresa la key generada desde el bot de Telegram.
+        </p>
+        <input type="text" id="inputKey" placeholder="WIDMAN-WEB-XXXX-XXXX" />
+        <button id="btnValidar" class="btn-main" style="width: 100%;" onclick="validarKey()">Validar e Ingresar</button>
+        <button class="btn-main" style="width: 100%; background: transparent; border: 1px solid var(--card-border); margin-top: 10px;" onclick="cerrarModal()">Cancelar</button>
+        <div id="msgKey" class="msg"></div>
       </div>
 
-      <button id="btnProcesar" class="btn active" onclick="procesarArchivo()" disabled>Modificar y Descargar</button>
-      <div id="msgTool" class="msg"></div>
+      <!-- Paso 2: Subir Archivo -->
+      <div id="stepTool" class="hidden">
+        <h2>Herramienta iOS</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">
+          Sube tu archivo para procesarlo en el servidor.
+        </p>
+
+        <div class="file-box" onclick="document.getElementById('fileInput').click()">
+          <span id="fileLabel">📁 Seleccionar archivo</span>
+          <input type="file" id="fileInput" onchange="actualizarArchivo(this)" />
+        </div>
+
+        <button id="btnProcesar" class="btn-main" style="width: 100%;" onclick="procesarArchivo()" disabled>Modificar y Descargar</button>
+        <button class="btn-main" style="width: 100%; background: transparent; border: 1px solid var(--card-border); margin-top: 10px;" onclick="cerrarModal()">Cerrar</button>
+        <div id="msgTool" class="msg"></div>
+      </div>
     </div>
   </div>
 
@@ -155,54 +325,69 @@
     const API_URL = "https://luminexx-dylib.onrender.com";
     let keyGuardada = "";
 
-    function toggleBtnState() {
-      const val = document.getElementById("inputKey").value.trim();
-      const btn = document.getElementById("btnIngresar");
-      if (val.length > 0) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
+    function abrirModalKey() {
+      document.getElementById("modalHerramienta").classList.remove("hidden");
+    }
+
+    function cerrarModal() {
+      document.getElementById("modalHerramienta").classList.add("hidden");
     }
 
     async function validarKey() {
       const input = document.getElementById("inputKey");
-      const btn = document.getElementById("btnIngresar");
+      const btn = document.getElementById("btnValidar");
       const msg = document.getElementById("msgKey");
-      const keyVal = input.value.trim();
+      const val = input.value.trim();
 
-      if (!keyVal) return;
+      if (!val) {
+        msg.className = "msg error";
+        msg.textContent = "Ingresa una key válida.";
+        return;
+      }
 
       btn.disabled = true;
       msg.className = "msg";
-      msg.textContent = "Verificando en base de datos...";
+      msg.textContent = "Conectando con el servidor...";
 
       try {
-        const response = await fetch(`${API_URL}/validar-key?key=${encodeURIComponent(keyVal)}`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000); // Timeout de 20s para el cold start
+
+        const response = await fetch(`${API_URL}/validar-key?key=${encodeURIComponent(val)}`, {
+          method: "GET",
+          signal: controller.signal,
+          headers: { "Accept": "application/json" }
+        });
+
+        clearTimeout(timeoutId);
         const data = await response.json();
 
         if (data.valida) {
-          keyGuardada = keyVal;
+          keyGuardada = val;
           msg.className = "msg success";
           msg.textContent = "¡Key válida!";
           
           setTimeout(() => {
-            document.getElementById("viewKey").classList.add("hidden");
-            document.getElementById("viewTool").classList.remove("hidden");
-          }, 500);
+            document.getElementById("stepKey").classList.add("hidden");
+            document.getElementById("stepTool").classList.remove("hidden");
+          }, 600);
         } else {
           msg.className = "msg error";
-          msg.textContent = data.error || "Key no válida o expirada.";
+          msg.textContent = data.error || "Key no válida.";
           btn.disabled = false;
         }
-      } catch (err) {
+      } catch (e) {
         msg.className = "msg error";
-        msg.textContent = "Error al conectar con el servidor.";
+        if (e.name === 'AbortError') {
+          msg.textContent = "El servidor estaba dormido. Intenta dar clic otra vez.";
+        } else {
+          msg.textContent = "Error de conexión con el servidor.";
+        }
         btn.disabled = false;
       }
     }
 
-    function archivoSeleccionado(input) {
+    function actualizarArchivo(input) {
       const label = document.getElementById("fileLabel");
       const btn = document.getElementById("btnProcesar");
 
@@ -238,7 +423,7 @@
 
         if (!response.ok) {
           const errData = await response.json();
-          throw new Error(errData.detail || "Error al modificar archivo.");
+          throw new Error(errData.detail || "Error al procesar.");
         }
 
         const blob = await response.blob();
@@ -255,7 +440,7 @@
         msg.textContent = "¡Descargado con éxito!";
       } catch (err) {
         msg.className = "msg error";
-        msg.textContent = err.message || "Ocurrió un error inesperado.";
+        msg.textContent = err.message || "Error al procesar.";
       } finally {
         btn.disabled = false;
       }
