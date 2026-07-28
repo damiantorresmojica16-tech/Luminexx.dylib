@@ -6,7 +6,7 @@ import random
 import string
 import time
 
-TOKEN_RESELLER = “8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI”
+TOKEN = '8712217253:AAGmnCdbIYFLOKtaHQLjLoGlc7bWsDgo2xI'
 bot = telebot.TeleBot(TOKEN_RESELLER)
 DB_FILE = 'database.json'
 
