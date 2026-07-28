@@ -1,180 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Widman iOS</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<style>
-:root{--accent:#6c47ff;--accent2:#a855f7;--accent-glow:#6c47ff33;--bg:#0d0d14;--surface:#13131f;--surface2:#1a1a2e;--border:#2a2a42;--text:#e8e8f0;--text-muted:#7a7a99}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;overflow-x:hidden;}
-canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.nav-bar{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;border-bottom:1px solid var(--border);background:#0d0d14cc;backdrop-filter:blur(12px);}
-.nav-logo{display:flex;align-items:center;gap:.55rem;font-size:.95rem;font-weight:800;letter-spacing:.04em;color:var(--text);}
-.nav-logo i{font-size:1.25rem;color:var(--accent);}
-.nav-tg{display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .9rem;border-radius:9px;border:1px solid #2a9ee833;background:#0088cc18;color:#29b6f6;font-size:.75rem;font-weight:700;cursor:pointer;text-decoration:none;transition:background .18s;}
-.nav-tg:hover{background:#0088cc30;border-color:#0088cc55;color:#4fc3f7;}
-.hero{position:relative;z-index:1;text-align:center;padding:4rem 1.5rem 2.5rem;}
-.hero-badge{display:inline-flex;align-items:center;gap:.45rem;background:#6c47ff1a;border:1px solid #6c47ff44;border-radius:999px;padding:.35rem 1rem;font-size:.73rem;font-weight:700;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:1.5rem;}
-.hero h1{font-size:clamp(2rem,8vw,3.2rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem;}
-.hero h1 span{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:clamp(.88rem,3vw,1.05rem);color:var(--text-muted);max-width:520px;margin:0 auto 2.25rem;line-height:1.65;}
-.btn-enter{display:inline-flex;align-items:center;gap:.55rem;padding:.9rem 2.2rem;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);color:#fff;font-size:1rem;font-weight:800;letter-spacing:.04em;cursor:pointer;text-decoration:none;box-shadow:0 6px 28px var(--accent-glow);transition:filter .18s,transform .12s,box-shadow .18s;}
-.btn-enter:hover{filter:brightness(1.12);box-shadow:0 8px 36px #6c47ff55;color:#fff;}
-.btn-enter:active{transform:scale(0.97);}
-.stats{position:relative;z-index:1;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;padding:.5rem 1.5rem 2.5rem;}
-.stat{text-align:center;}
-.stat-num{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-.stat-label{font-size:.7rem;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;}
-.stat-sep{width:1px;background:var(--border);align-self:stretch;margin:0 .25rem;}
-.features{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;padding:0 1.25rem 3rem;max-width:900px;margin:0 auto;}
-.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.25rem;transition:border-color .2s,box-shadow .2s;}
-.feat-card:hover{border-color:#6c47ff55;box-shadow:0 0 24px #6c47ff1a;}
-.feat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.9rem;}
-.feat-title{font-size:.9rem;font-weight:800;margin-bottom:.4rem;color:var(--text);}
-.feat-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6;}
-.footer{position:relative;z-index:1;text-align:center;padding:1.25rem 1rem 2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.72rem;}
-.tg-popup-overlay{display:none;position:fixed;inset:0;background:#00000088;z-index:100;align-items:center;justify-content:center;}
-.tg-popup-overlay.show{display:flex;}
-.tg-popup{background:#13131f;border:1px solid #2a2a42;border-radius:18px;padding:1.5rem 1.25rem;max-width:320px;width:90%;text-align:center;box-shadow:0 20px 60px #00000099;}
-.tg-popup-title{font-size:.95rem;font-weight:700;color:#e8e8f0;margin-bottom:.35rem;}
-.tg-popup-sub{font-size:.8rem;color:#7a7a99;margin-bottom:1.1rem;line-height:1.5;}
-.tg-popup-btns{display:flex;flex-direction:column;gap:.55rem;}
-.tg-popup-link{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1rem;border-radius:10px;border:1px solid #2a9ee844;background:#0088cc22;color:#29b6f6;font-size:.82rem;font-weight:700;text-decoration:none;transition:background .18s;}
-.tg-popup-link:hover{background:#0088cc40;color:#4fc3f7;}
-.tg-popup-close{margin-top:.85rem;background:none;border:none;color:#7a7a99;font-size:.75rem;cursor:pointer;text-decoration:underline;}
-.tg-popup-close:hover{color:#e8e8f0;}
-</style>
-</head>
-<body>
-<canvas id="bgCanvas" width="393" height="695"></canvas>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widman iOS - Modificador Free Fire</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: #0b0a17; color: #ffffff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
+    .container { max-width: 520px; width: 100%; text-align: center; margin-top: 30px; }
+    .badge { background: rgba(124, 58, 237, 0.15); border: 1px solid #7c3aed; color: #c084fc; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; display: inline-block; margin-bottom: 20px; font-weight: 600; }
+    h1 { font-size: 2.1rem; margin-bottom: 12px; }
+    p.subtitle { color: #9ca3af; font-size: 0.95rem; margin-bottom: 28px; line-height: 1.5; }
+    .btn-main { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; border: none; padding: 16px 32px; font-size: 1rem; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4); }
+    
+    /* Ventana Modal de Key */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+    .modal-box { background: #16152b; border: 1px solid #2e2b54; padding: 28px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; position: relative; }
+    .key-input { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #3f3c6e; background: #0d0c1d; color: #fff; font-size: 1rem; text-align: center; margin: 15px 0; outline: none; text-transform: uppercase; }
+    .btn-submit { background: #7c3aed; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .close-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; color: #a1a1aa; font-size: 1.3rem; cursor: pointer; }
+    #msg { margin-top: 12px; font-size: 0.85rem; font-weight: bold; }
 
-<div class="tg-popup-overlay" id="tgPopup" onclick="if(event.target===this)this.classList.remove('show')">
-    <div class="tg-popup">
-        <p class="tg-popup-title"><i class="bi bi-telegram me-1" style="color:#29b6f6"></i>Grupos de Telegram</p>
-        <p class="tg-popup-sub">Únete para obtener tu licencia de acceso</p>
-        <div class="tg-popup-btns">
-            <a class="tg-popup-link" href="https://t.me/black_ios12" target="_blank" rel="noopener"><i class="bi bi-telegram"></i>Widman iOS</a>
-        </div>
-        <button class="tg-popup-close" onclick="document.getElementById('tgPopup').classList.remove('show')">Cerrar</button>
-    </div>
-</div>
-
-<nav class="nav-bar">
-    <div class="nav-logo"><i class="bi bi-controller"></i>Widman iOS</div>
-    <button class="nav-tg" onclick="document.getElementById('tgPopup').classList.add('show')"><i class="bi bi-telegram"></i>Telegram</button>
-</nav>
-
-<section class="hero">
-    <div class="hero-badge"><i class="bi bi-stars"></i>Herramienta Free Fire iOS</div>
-    <h1>Crea tus archivos de<br><span>Free Fire</span> fácil y rápido</h1>
-    <p class="hero-sub">
-        Genera y personaliza tus archivos de Free Fire directamente desde el navegador.
-        Sin instalaciones, sin complicaciones — solo sube tu archivo y listo.
-    </p>
-    <a href="/Home/Login" class="btn-enter"><i class="bi bi-unlock-fill"></i>Entrar a la herramienta</a>
-</section>
-
-<div class="stats">
-    <div class="stat"><div class="stat-num">iOS</div><div class="stat-label">Plataforma</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Funciones</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratis</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Disponible</div></div>
-</div>
-
-<section class="features">
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#6c47ff1a;color:#a855f7"><i class="bi bi-fire"></i></div>
-        <p class="feat-title">HOLOGRAMA ARMA</p>
-        <p class="feat-desc">Crea tu archivo de holograma arma completo para Free Fire, con soporte para configuración alternativa y olo evolutivas.</p>
-    </div>
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#10b9811a;color:#10b981"><i class="bi bi-person-bounding-box"></i></div>
-        <p class="feat-title">AVATAR</p>
-        <p class="feat-desc">Genera tu archivo de avatar femenino personalizado para Free Fire de forma instantánea.</p>
-    </div>
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#f9731618;color:#f97316"><i class="bi bi-award-fill"></i></div>
-        <p class="feat-title">OLO PERSONAJE 100%</p>
-        <p class="feat-desc">Crea tu archivo de personaje al 100% para Free Fire sin necesidad de ninguna herramienta adicional.</p>
-    </div>
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#0ea5e91a;color:#0ea5e9"><i class="bi bi-box-arrow-up"></i></div>
-        <p class="feat-title">EXPLORAR ARCHIVOS</p>
-        <p class="feat-desc">Analiza tu archivo de Free Fire, ve todos sus componentes con sus nombres reales y descarga el que necesites.</p>
-    </div>
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#eab3081a;color:#eab308"><i class="bi bi-hdd-fill"></i></div>
-        <p class="feat-title">CACHE & WALKC HACK</p>
-        <p class="feat-desc">Operaciones especiales para modificaciones avanzadas de Free Fire de forma rápida y sencilla.</p>
-    </div>
-    <div class="feat-card">
-        <div class="feat-icon" style="background:#22c55e1a;color:#22c55e"><i class="bi bi-shield-lock-fill"></i></div>
-        <p class="feat-title">Acceso por licencia</p>
-        <p class="feat-desc">Sistema de acceso seguro por key. Únete a nuestros grupos de Telegram para obtener tu licencia gratis.</p>
-    </div>
-</section>
-
-<footer class="footer">
-    <i class="bi bi-circle-fill me-1" style="color:#22c55e;font-size:.45rem;vertical-align:middle"></i>
-    Widman iOS • Herramienta Free Fire • 24/7
-</footer>
-
-<script>
-(function() {
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
-    let W, H, pts;
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    function mkPt() { return { x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.35, vy: -(Math.random()*.45+.08), r: Math.random()*1.4+.4, a: Math.random()*.45+.08, c: Math.random()>.5?'108,71,255':'168,85,247' }; }
-    function init() { resize(); pts=[]; const n=Math.min(65,Math.floor(W*H/12000)); for(let i=0;i<n;i++) pts.push(mkPt()); }
-    function frame() {
-        ctx.clearRect(0,0,W,H);
-        for(let i=0;i<pts.length;i++) {
-            const p=pts[i]; p.x+=p.vx; p.y+=p.vy;
-            if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}
-            if(p.x<-10)p.x=W+10; if(p.x>W+10)p.x=-10;
-            ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-            ctx.fillStyle='rgba('+p.c+','+p.a+')'; ctx.fill();
-            for(let j=i+1;j<pts.length;j++) {
-                const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
-                if(d<120){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle='rgba(108,71,255,'+(0.07*(1-d/120))+')';ctx.lineWidth=.5;ctx.stroke();}
-            }
-        }
-        requestAnimationFrame(frame);
-    }
-    init(); frame();
-    window.addEventListener('resize', init);
-})();
-</script>
-
-<div id="__devblock" style="display:none;position:fixed;inset:0;z-index:2147483647;background:#0d0d14;align-items:center;justify-content:center;flex-direction:column;gap:1rem;user-select:none;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="#6c47ff" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"></path></svg>
-    <p style="color:#e8e8f0;font-weight:700;font-size:1.15rem;margin:0">Acceso bloqueado</p>
-    <p style="color:#7a7a99;font-size:.85rem;margin:0">Las herramientas de desarrollo están desactivadas.</p>
-    <p style="color:#3a3a55;font-size:.72rem;margin-top:.5rem">Widman iOS • Protected</p>
-</div>
-<style>*{-webkit-touch-callout:none!important;-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important}input,textarea{-webkit-user-select:text!important;user-select:text!important}</style>
-<script>
-!function(){
-    var _L=false,_S=document.getElementById('__devblock');
-    function _lk(){if(_L)return;_L=true;if(_S)_S.style.display='flex';document.body.style.overflow='hidden';}
-    document.addEventListener('contextmenu',function(e){e.preventDefault();e.stopPropagation();return false;},true);
-    document.addEventListener('keydown',function(e){
-        var c=e.ctrlKey||e.metaKey,s=e.shiftKey,k=(e.key||'').toUpperCase();
-        if(e.keyCode===123||(c&&s&&'IJC'.includes(k))||(c&&'USP'.includes(k))){e.preventDefault();e.stopPropagation();return false;}
-    },true);
-    document.addEventListener('dragstart',function(e){e.preventDefault();},true);
-    setInterval(function(){try{console.clear();}catch(e){}},400);
-    setInterval(function(){if((window.outerWidth-window.innerWidth>250)||(window.outerHeight-window.innerHeight>250)){_lk();}},1000);
-    setInterval(function(){if(window.Firebug&&window.Firebug.chrome&&window.Firebug.chrome.isInitialized){_lk();}},1000);
-    var _img=new Image();Object.defineProperty(_img,'id',{get:function(){_lk();}});
-    setInterval(function(){try{console.log(_img);}catch(e){}},1000);
-}();
-</script>
-
-
-</body>
+    /* Panel de Procesamiento (Modificador de Hologramas) */
+    #tool-panel { display: none; width: 100%; max-width: 520px; margin-top: 20px; background: #16152b; border: 1px solid #2e2b54; padding: 25px; border-radius: 16px; text-align: center; }
+    .upload-box { border: 2px dashed #3f3c6e; padding: 30px 20px; border-radius: 12px; background: #0d0c1d; margin-top: 15px; }
+    .file-input { display: none; }
+    .file-label { background
