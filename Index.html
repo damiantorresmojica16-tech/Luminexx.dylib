@@ -36,7 +36,6 @@
       padding-bottom: 40px;
     }
 
-    /* Header Navbar */
     header {
       width: 100%;
       max-width: 600px;
@@ -68,7 +67,6 @@
       gap: 6px;
     }
 
-    /* Hero Principal */
     .hero {
       text-align: center;
       padding: 30px 20px 20px;
@@ -141,7 +139,6 @@
       transform: none;
     }
 
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -173,7 +170,6 @@
       margin-top: 10px;
     }
 
-    /* Modal / Pop-up de Key */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -240,7 +236,6 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <div class="brand">
       <span>🎮</span> Widman iOS
@@ -250,7 +245,6 @@
     </a>
   </header>
 
-  <!-- Hero Principal -->
   <section class="hero">
     <div class="badge">
       ✨ HERRAMIENTA FREE FIRE IOS
@@ -267,7 +261,6 @@
     </button>
   </section>
 
-  <!-- Stats Grid -->
   <div class="stats-grid">
     <div class="stat-item">
       <h3>iOS</h3>
@@ -287,14 +280,12 @@
     </div>
   </div>
 
-  <!-- Modal de Validación / Subida -->
   <div id="modalHerramienta" class="modal-overlay hidden">
     <div class="modal-card">
-      <!-- Paso 1: Ingresar Key -->
       <div id="stepKey">
         <h2>Acceso Requerido</h2>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">
-          Ingresa la key generada desde el bot de Telegram.
+          Ingresa la key del archivo de texto.
         </p>
         <input type="text" id="inputKey" placeholder="WIDMAN-WEB-XXXX-XXXX" />
         <button id="btnValidar" class="btn-main" style="width: 100%;" onclick="validarKey()">Validar e Ingresar</button>
@@ -302,7 +293,6 @@
         <div id="msgKey" class="msg"></div>
       </div>
 
-      <!-- Paso 2: Subir Archivo -->
       <div id="stepTool" class="hidden">
         <h2>Herramienta iOS</h2>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">
@@ -347,19 +337,10 @@
 
       btn.disabled = true;
       msg.className = "msg";
-      msg.textContent = "Conectando con el servidor...";
+      msg.textContent = "Verificando key en keys.txt...";
 
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 20000); // Timeout de 20s para el cold start
-
-        const response = await fetch(`${API_URL}/validar-key?key=${encodeURIComponent(val)}`, {
-          method: "GET",
-          signal: controller.signal,
-          headers: { "Accept": "application/json" }
-        });
-
-        clearTimeout(timeoutId);
+        const response = await fetch(`${API_URL}/validar-key?key=${encodeURIComponent(val)}`);
         const data = await response.json();
 
         if (data.valida) {
@@ -378,11 +359,7 @@
         }
       } catch (e) {
         msg.className = "msg error";
-        if (e.name === 'AbortError') {
-          msg.textContent = "El servidor estaba dormido. Intenta dar clic otra vez.";
-        } else {
-          msg.textContent = "Error de conexión con el servidor.";
-        }
+        msg.textContent = "Error al conectar con el servidor.";
         btn.disabled = false;
       }
     }
