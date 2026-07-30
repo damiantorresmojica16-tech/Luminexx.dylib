@@ -18,17 +18,33 @@ PRICES = {
 
 def load_db():
     if not os.path.exists(DB_FILE):
-        return {"banned_resellers": [], "keys": [], "resellers": {}}
+        return {"banned_resellers": [], "keys": [], "resellers": {}, "keys_status": "active"}
     with open(DB_FILE, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        data = json.load(f)
+        if "keys_status" not in data:
+            data["keys_status"] = "active"
+        return data
 
 def save_db(data):
     with open(DB_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)
 
-def is_banned(user_id):
+# --- SISTEMA DE VALIDACIÓN DE REVENDEDORES ---
+def es_revendedor_autorizado(user_id):
     db = load_db()
-    return str(user_id) in db.get("banned_resellers", [])
+    user_str = str(user_id)
+    
+    # 1. Si está baneado, denegar acceso
+    if user_str in db.get("banned_resellers", []):
+        return False
+        
+    # 2. Si NO fue agregado por el Owner en la base de datos, denegar acceso
+    resellers_data = db.get("resellers", {})
+    if user_str in resellers_data:
+        return True
+        
+    return False
+# ---------------------------------------------
 
 def get_reseller_menu():
     markup = InlineKeyboardMarkup(row_width=2)
@@ -48,8 +64,13 @@ def get_reseller_menu():
 def send_reseller_start(message):
     user_id = message.from_user.id
     
-    if is_banned(user_id):
-        bot.reply_to(message, "❌ **Acceso denegado:** Tu cuenta ha sido baneada por el administrador.", parse_mode="Markdown")
+    # Validación estricta de autorización
+    if not es_revendedor_autorizado(user_id):
+        bot.reply_to(
+            message, 
+            "⛔ **Acceso denegado:** No estás autorizado para usar este bot o tu cuenta no ha sido registrada por el administrador.", 
+            parse_mode="Markdown"
+        )
         return
 
     db = load_db()
@@ -80,8 +101,9 @@ def send_reseller_start(message):
 def reseller_callbacks(call):
     user_id = call.from_user.id
     
-    if is_banned(user_id):
-        bot.answer_callback_query(call.id, text="Acceso denegado (Baneado)", show_alert=True)
+    # Validación en cada clic de botón
+    if not es_revendedor_autorizado(user_id):
+        bot.answer_callback_query(call.id, text="⛔ Acceso denegado (No autorizado)", show_alert=True)
         return
 
     chat_id = call.message.chat.id
